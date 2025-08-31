@@ -7,19 +7,27 @@ const ProductRoutes = require("./routes/ProductRoutes");
 
 dotenv.config();
 app.use(cors());
+app.use(express.json());
 
+mongoose.connect(process.env.MONGODB_URI).then(() => {
+    app.listen(process.env.PORT, () => {
+        console.log("DB Connection Successful");
+    })
+}).catch(() => {
+    console.log("Failed to connect to database");
+})
 
 // ROUTES
 app.use("/api", ProductRoutes);
 
-
-mongoose.connect(process.env.MONGODB_URI).then(() => {
-    console.log("Connected To DB Successfully");
-}).catch((err) => {
-    console.log("ERROR: ", err);
-})
-
+app.get('/', (req, res) => {
+    res.json({
+        message: "Server is running successfully!",
+    });
+});
 
 app.listen(process.env.PORT, () => {
     console.log("Server Listening ...");
-})
+});
+
+module.exports = app;
