@@ -1,7 +1,7 @@
 import SearchBar from "../../components/SearchBar";
 import { ProductsContext } from "../../context/ProductsProvider";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { FlatList, Text, View, ActivityIndicator, Image, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import { FlatList, Text, View, ActivityIndicator, Image, TouchableWithoutFeedback, StyleSheet, TouchableOpacity } from "react-native";
 import Product from "../../models/Product";
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import TabTitle from "../../components/TabTitle";
@@ -62,11 +62,11 @@ export default function TabTwoScreen() {
               keyExtractor={(item) => `#${item.id}`}
               renderItem={({ item }) => (
                 <View style={styles.card}>
-                  <TouchableWithoutFeedback onPressIn={() => { addProductToCart(item.id) }}>
-                    <View style={styles.cartIcon}>
+                  <TouchableOpacity style={styles.cartIcon} onPressIn={() => { addProductToCart(item.id) }}>
+                    <View >
                       <MaterialIcons name="add-shopping-cart" size={24} color={`${item.cartQuantity > 0 ? 'darkorange' : '#aaa'}`} />
                     </View>
-                  </TouchableWithoutFeedback >
+                  </TouchableOpacity >
                   <Image source={{ uri: item.thumbnail }} style={{ width: 200, height: 200 }} />
                   <View>
                     <Text style={styles.txt}>{item.title}</Text>
