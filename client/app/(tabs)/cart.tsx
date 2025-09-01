@@ -4,16 +4,17 @@ import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, Text, Touch
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
-import Modal from "react-native-modal";
-const { width } = Dimensions.get("window");
+import CheckoutModel from "../../components/CheckoutModel";
 
 import Product from "../../models/Product";
 import TabTitle from "../../components/TabTitle";
+
 
 export default function TabTwoScreen() {
   const { products, setProducts } = useContext(ProductsContext);
   const [cartProducts, setCartProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
 
@@ -25,6 +26,20 @@ export default function TabTwoScreen() {
       setLoading(false);
     }, 1000);
   }, [products]);
+
+  useEffect(() => {
+    const totalPrice = (cartProducts.reduce((total, cur) => total + (cur.price * cur.cartQuantity), 0)).toFixed(2);
+    setTotalPrice(Number(totalPrice));
+  }, [cartProducts]);
+
+
+
+  const onChangeQuantity = (id: number, quantity: number) => {
+    const newProducts = [...products];
+    const idx = newProducts.findIndex(p => p.id === id);
+    newProducts[idx] = { ...newProducts[idx], cartQuantity: newProducts[idx].cartQuantity + quantity }
+    setProducts(newProducts);
+  }
 
   return (
     <View style={styles.container}>
@@ -53,22 +68,12 @@ export default function TabTwoScreen() {
         }
       </TabTitle>
 
-      <Modal
-        isVisible={isVisible}
-        onSwipeComplete={() => setIsVisible(false)}
-        swipeDirection="down"
-        style={{ width: width, margin: 0, zIndex: 10 }}
-      >
-        <View style={styles.modal}>
-          <View style={{ width: 120, borderRadius: 5, height: 4, backgroundColor: '#ddd', margin: "auto", marginTop: 10 }}></View>
-        </View>
-      </Modal>
-
+      <CheckoutModel isVisible={isVisible} setIsVisible={setIsVisible} totalPrice={totalPrice} setCartProducts={setCartProducts} />
 
       <View style={{ width: "100%", flex: 1, justifyContent: "center", alignItems: "center" }}>
         {
           loading ? (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: -100 }}>
+            <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color="black" style={{ transform: 'scale(1.5)' }} />
             </View>
           ) : (
@@ -107,40 +112,26 @@ export default function TabTwoScreen() {
                       keyExtractor={(item) => `#${item.id}`}
                       renderItem={({ item }) => (
                         <View style={styles.card}>
-                          <Image source={{ uri: item.thumbnail }} style={{ width: 150, height: 150 }} />
-                          <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPressIn={() => {
-                            const newProducts = [...products];
-                            const idx = newProducts.findIndex(p => p.id === item.id);
-                            newProducts[idx] = { ...newProducts[idx], cartQuantity: 0 }
-                            setProducts(newProducts);
-                          }}>
+                          <Image source={{ uri: item.thumbnail }} style={{ width: 150, height: 180 }} />
+                          <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPressIn={() => onChangeQuantity(item.id, item.cartQuantity * -1)}>
                             <Ionicons name="trash" size={20} color="red" />
                           </TouchableOpacity>
 
-                          <View style={{ height: 100, flex: 1, flexDirection: "column", justifyContent: "space-between", alignItems: "center" }}>
-                            <Text style={[styles.txt, { fontWeight: 600 }]}>{item.title}</Text>
-
+                          <View style={{ gap: 40, flex: 1, flexDirection: "column", justifyContent: "space-between", alignItems: "center" }}>
+                            <Text style={styles.title}>{item.title}</Text>
                             <View style={{ width: 100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 50 }}>
-                              <Text style={[styles.txt, { fontWeight: 'bold', fontSize: 18 }]}>$ {item.price}</Text>
-                              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, backgroundColor: '#ddd', padding: 5, borderRadius: 40 }}>
-                                <TouchableOpacity onPressIn={() => {
-                                  const newProducts = [...products];
-                                  const idx = newProducts.findIndex(p => p.id === item.id);
-                                  newProducts[idx] = { ...newProducts[idx], cartQuantity: newProducts[idx].cartQuantity - 1 }
-                                  setProducts(newProducts);
-                                }} >
+                              <Text style={styles.price}>$ {item.price}</Text>
+
+                              <View style={styles.productQuantityControlsContainer}>
+                                <TouchableOpacity onPressIn={() => onChangeQuantity(item.id, -1)}>
                                   <Ionicons name="remove" size={20} color="black" />
                                 </TouchableOpacity>
                                 <Text style={{ fontSize: 18, fontWeight: 600 }}>{item.cartQuantity}</Text>
-                                <TouchableOpacity onPressIn={() => {
-                                  const newProducts = [...products];
-                                  const idx = newProducts.findIndex(p => p.id === item.id);
-                                  newProducts[idx] = { ...newProducts[idx], cartQuantity: newProducts[idx].cartQuantity + 1 }
-                                  setProducts(newProducts);
-                                }}>
+                                <TouchableOpacity onPressIn={() => onChangeQuantity(item.id, 1)}>
                                   <Ionicons name="add" size={20} color="black" />
                                 </TouchableOpacity>
                               </View>
+
                             </View>
                           </View>
                         </View>
@@ -149,7 +140,7 @@ export default function TabTwoScreen() {
                         <View>
                           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
                             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Total:</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>$ {(cartProducts.reduce((total, cur) => total + (cur.price * cur.cartQuantity), 0)).toFixed(2)}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: "#000" }}>$ {totalPrice}</Text>
                           </View>
                           <TouchableOpacity
                             style={[
@@ -179,7 +170,6 @@ export default function TabTwoScreen() {
             </View>
           )
         }
-
       </View>
     </View>
   );
@@ -190,15 +180,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ddd",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -100
+  },
   divider: {
     height: 1,
     backgroundColor: "#aaa",
     marginVertical: 8,
     marginHorizontal: 10
   },
-  txt: {
+  price: {
+    fontWeight: 800,
+    fontSize: 18,
     color: "#000",
     textAlign: "center",
+  },
+  title: {
+    fontWeight: 600,
+    color: "#000",
+    textAlign: "center",
+    fontSize: 15
   },
   btn: {
     padding: 10,
@@ -225,26 +229,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     color: "#fff",
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
-
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 2
   },
-  modal: {
-    backgroundColor: "#000",
-    height: 500,
-    margin: 0,
-    width: '100%',
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
+  productQuantityControlsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: '#ddd',
+    padding: 5,
+    borderRadius: 40
   }
 
 });

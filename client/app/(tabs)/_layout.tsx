@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { View } from 'react-native';
 
 import { HapticTab } from '../../components/HapticTab';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -55,7 +54,7 @@ export default function TabLayout() {
                 name="cart"
                 options={{
                     title: 'Cart',
-                    tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+                    tabBarIcon: ({ color="", size }: { color: string; size: number }) => (
                         <Ionicons name="cart-outline" size={size} color={color} />
                     ),
                 }}

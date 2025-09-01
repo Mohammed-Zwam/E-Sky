@@ -7,9 +7,9 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 export default function HomeScreen() {
   const images = [
-    require("../../assets/images/slider1.jpg"),
-    require("../../assets/images/slider2.jpg"),
-    require("../../assets/images/slider3.jpg")
+    require("../../assets/images/slider1.webp"),
+    require("../../assets/images/slider2.webp"),
+    require("../../assets/images/slider3.webp")
   ];
   return (
     <View style={styles.container}>
@@ -18,24 +18,28 @@ export default function HomeScreen() {
         <View style={{ height: 200, marginTop: 20 }}>
           <Swiper
             autoplay={true}
-            autoplayTimeout={3}
+            autoplayTimeout={4}
+            loop={true}
             showsPagination={true}
             dotStyle={styles.dot}
             activeDotStyle={styles.activeDot}
+            removeClippedSubviews={false}
+            loadMinimalSize={3} 
+            bounces={false} 
           >
-            {images.map((item, index) => (
-              <View key={index} style={styles.slide}>
-                <Image source={item} style={styles.image} />
-              </View>
-            ))}
-          </Swiper>
-        </View>
-        <View style={styles.shape}>
-          <Features />
-          <Categories />
-        </View>
+          {images.map((item, index) => (
+            <View key={index} style={styles.slide}>
+              <Image source={item} style={styles.image} />
+            </View>
+          ))}
+        </Swiper>
+      </View>
+      <View style={styles.shape}>
+        <Features />
+        <Categories />
       </View>
     </View>
+    </View >
   );
 }
 

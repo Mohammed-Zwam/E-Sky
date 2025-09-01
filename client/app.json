@@ -3,41 +3,33 @@
     "name": "E-Sky",
     "slug": "e-sky",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/E-Sky-Icon.png",
+    "icon": "./assets/images/E-Sky-Logo.jpg",
     "scheme": "e-sky",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/E-Sky-Icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/E-Sky-Icon.png",
-      "backgroundColor": "#FFFFFF"
-    },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
+        
         {
-          "image": "./assets/images/E-Sky-Icon.png",
-          "imageWidth": 100,
-          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/E-Sky-Logo.jpg",
+          "imageWidth": 75,
           "resizeMode": "contain"
         }
       ]
     ],
-    "experiments": {
-      "typedRoutes": true
+    "notification": {
+      "icon": "./assets/images/E-Sky-Logo.jpg",
+      "androidMode": "default"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/E-Sky-Logo.jpg",
+        "backgroundColor": "#FFFFFF",
+        "width": 50
+      }
+    },
+    "ios": {
+      "supportsTablet": true
     }
   }
 }
