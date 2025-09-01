@@ -34,6 +34,7 @@
     "react-native": "0.79.5",
     "react-native-animatable": "^1.4.0",
     "react-native-awesome-alerts": "^2.0.0",
+    "react-native-dotenv": "^3.4.11",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",

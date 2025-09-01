@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
             "/api/payment/pay": {
                 description: "Create Payment Intent",
                 method: "POST"
+            },
+            "/api/payment/api_key": {
+                description: "Get Stripe Publishable Key",
+                method: "GET"
             }
         }
     });
