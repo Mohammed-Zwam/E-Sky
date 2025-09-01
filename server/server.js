@@ -23,9 +23,15 @@ app.use("/api/payment", PaymentRoutes);
 app.get('/', (req, res) => {
     res.json({
         message: "Server is running successfully!",
+        endPoints: {
+            "/api/products": "Get All Products",
+            "/api/payment/pay": "Create Payment Intent",
+        }
     });
 });
 
-
+app.listen(process.env.PORT, () => {
+    console.log("Server Listening ...");
+});
 
 module.exports = app;

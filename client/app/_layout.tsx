@@ -3,26 +3,13 @@ import ProductsProvider from '../context/ProductsProvider';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 import { StripeProvider } from '@stripe/stripe-react-native';
-import { useEffect, useState } from 'react';
 
 
 export default function RootLayout() {
-  const [publishableKey, setPublishableKey] = useState('');
-
-  const fetchPublishableKey = async () => {
-    const res = await fetch('https://e-sky-server.vercel.app/api/payment/api_key').then((res) => res.json()).catch((err) => {
-      console.log(err)
-    });
-    setPublishableKey(res.api_key);
-  };
-
-  useEffect(() => {
-    fetchPublishableKey();
-  }, []);
-
+  const publishableKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
   return (
     <StripeProvider
-      publishableKey={publishableKey}
+      publishableKey={publishableKey as string}
       urlScheme="e-sky"
     >
       <ProductsProvider>

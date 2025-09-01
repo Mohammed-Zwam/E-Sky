@@ -1,11 +1,6 @@
 const router = require('express').Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-router.get('/api_key', async (req, res) => {
-    res.status(200).json({
-        api_key: process.env.STRIPE_PUBLISHABLE_KEY,
-    });
-});
 
 router.post("/pay", async (req, res) => {
     try {
