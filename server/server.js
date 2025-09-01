@@ -24,8 +24,14 @@ app.get('/', (req, res) => {
     res.json({
         message: "Server is running successfully!",
         endPoints: {
-            "/api/products": "Get All Products",
-            "/api/payment/pay": "Create Payment Intent",
+            "/api/products": {
+                description: "Get All Products",
+                method: "GET"
+            },
+            "/api/payment/pay": {
+                description: "Create Payment Intent",
+                method: "POST"
+            }
         }
     });
 });
