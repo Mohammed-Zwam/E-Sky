@@ -25,31 +25,6 @@ E-Sky is a React Native mobile app that allows users to browse products and simu
 
 This ensures that you can showcase the payment workflow safely while respecting Stripe’s security constraints.
 
-## Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/Mohammed-Zwam/E-Sky.git
-```
-2. Install dependencies for both client and server:
-
-```bash
-cd client && npm install
-cd ../server && npm install
-```
-
-3. Set up environment variables:
-
-- MongoDB URI
-- Stripe API keys (for real payments)
-
-4. Run the React Native app:
-
-```bash
-cd ../client
-npm start
-```
 
 ## Screenshots
 ![Home Screen](./assets/Home.jpg)
@@ -65,6 +40,7 @@ npm start
 
 ## Demo Video
 [🔗 Watch Demo Video](https://drive.google.com/file/d/10oMG7F0hhrUlGzPYG8UL0HMV5wupbifK/view?usp=sharing)
+
 
 
 
